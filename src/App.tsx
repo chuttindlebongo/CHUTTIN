@@ -21,57 +21,18 @@ import { BrandSettings } from './pages/dashboard/BrandSettings';
 import { AdminOverview } from './pages/admin/Overview';
 import { AdminOrders } from './pages/admin/Orders';
 import { AdminBrands } from './pages/admin/Brands';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginForm } from './components/auth/LoginForm';
-import { SignupForm } from './components/auth/SignupForm';
-import { Dashboard } from './pages/Dashboard';
-import { Success } from './pages/Success';
-import { ProtectedRoute } from './components/ProtectedRoute';
-import { useAuth } from './hooks/useAuth';
+import { AdminUsers } from './pages/admin/Users';
 
 function App() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-      </div>
-    );
-  }
-
   return (
-    <AuthProvider>
-      <Routes>
-        <Route 
-          path="/" 
-          element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />} 
-        />
-        <Route 
-          path="/login" 
-          element={user ? <Navigate to="/dashboard" replace /> : <LoginForm />} 
-        />
-        <Route 
-          path="/signup" 
-          element={user ? <Navigate to="/dashboard" replace /> : <SignupForm />} 
-        />
-        <Route 
-          path="/dashboard" 
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/success" 
-          element={
-            <ProtectedRoute>
-              <Success />
-            </ProtectedRoute>
-          } 
-        />
-      </Routes>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/catalog" element={<Catalog />} />
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
 
           <Route path="/:brandSlug/:productSlug" element={<ProductPage />} />
@@ -161,8 +122,8 @@ function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
